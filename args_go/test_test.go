@@ -1,4 +1,4 @@
-package test
+package args_go
 
 import (
 	"polymorphism/args"
