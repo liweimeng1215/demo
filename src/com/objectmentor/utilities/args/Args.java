@@ -26,7 +26,7 @@ public class Args {
                     "logging: %b, port: %d, directory: %s, files: %s, rank: %f\n",
                     logging, port, directory, Arrays.toString(files), rank);
         } catch (ArgsException e) {
-            System.out.printf("Argumenterror:% s\n", e.errorMessage());
+            System.out.printf("Argumenterror:%s\n", e.errorMessage());
         }
     }
 
