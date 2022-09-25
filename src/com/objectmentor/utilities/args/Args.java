@@ -16,15 +16,17 @@ public class Args {
 
     public static void main(String[] args) {
         try {
-            Args arg = new Args("l, p#, d*", args);
+            Args arg = new Args("l, p#, d*, f[*], r##", args);
             boolean logging = arg.getBoolean('l');
             int port = arg.getInt('p');
             String directory = arg.getString('d');
+            String[] files = arg.getStringArray('f');
+            Double rank = arg.getDouble('r');
             System.out.printf(
-                    "logging: %b, port: %d, directory: %s\n",
-                    logging, port, directory);
+                    "logging: %b, port: %d, directory: %s, files: %s, rank: %f\n",
+                    logging, port, directory, Arrays.toString(files), rank);
         } catch (ArgsException e) {
-            System.out.printf("Argumenterror:%s\n", e.errorMessage());
+            System.out.printf("Argumenterror:% s\n", e.errorMessage());
         }
     }
 
@@ -39,6 +41,8 @@ public class Args {
         if (elementTail.length() == 0) marshalers.put(elementId, new BooleanArgumentMarshaler());
         else if (elementTail.equals("*")) marshalers.put(elementId, new StringArgumentMarshaler());
         else if (elementTail.equals("#")) marshalers.put(elementId, new IntegerArgumentMarshaler());
+        else if (elementTail.equals("##")) marshalers.put(elementId, new DoubleArgumentMarshaler());
+        else if (elementTail.equals("[*]")) marshalers.put(elementId, new StringArrayArgumentMarshaler());
         else throw new ArgsException(ArgsException.ErrorCode.INVALID_ARGUMENT_FORMAT, elementId, elementTail);
     }
 
@@ -97,4 +101,13 @@ public class Args {
     public int getInt(char arg) {
         return IntegerArgumentMarshaler.getValue(marshalers.get(arg));
     }
+
+    public double getDouble(char arg) {
+        return DoubleArgumentMarshaler.getValue(marshalers.get(arg));
+    }
+
+    public String[] getStringArray(char arg) {
+        return StringArrayArgumentMarshaler.getValue(marshalers.get(arg));
+    }
+
 }
